@@ -44,6 +44,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
+          placeholder='Digite o nome do monstro'
           required
         />
       </label>
@@ -53,6 +54,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={hp}
           onChange={e => setHp(e.target.value)}
+          placeholder='Pontos de vida'
           required
           min="0"
         />
@@ -63,6 +65,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={attack}
           onChange={e => setAttack(e.target.value)}
+          placeholder='Pontos de ataque'
           required
           min="0"
         />
@@ -73,6 +76,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={defense}
           onChange={e => setDefense(e.target.value)}
+          placeholder='Pontos de defesa'
           required
           min="0"
         />
@@ -83,6 +87,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={speed}
           onChange={e => setSpeed(e.target.value)}
+          placeholder='Pontos de velocidade'
           required
           min="0"
         />
@@ -93,6 +98,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="text"
           value={specialAbility}
           onChange={e => setSpecialAbility(e.target.value)}
+          placeholder='Habilidade especial do monstro'
           required
         />
       </label>

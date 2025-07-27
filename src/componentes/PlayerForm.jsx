@@ -29,7 +29,7 @@ function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
   return (
     <form className="playerForm" onSubmit={handleSubmit}>
       <label>
-        Nome:
+        Nome: 
         <input
           type="text"
           value={name}

@@ -1,0 +1,51 @@
+.monster-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #f1efef;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.monster-container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.monster-container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.monster-container button:hover {
+  background-color: #0056b3;
+}
+
+.monster-list {
+    display: flex;
+    flex-direction: column;
+  list-style: none;
+  padding: 0;
+}
+
+.monster-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ccc;
+  font-size: 1rem;
+  color: #333;
+}
+
+.monster-list li:last-child {
+  border-bottom: none;
+}

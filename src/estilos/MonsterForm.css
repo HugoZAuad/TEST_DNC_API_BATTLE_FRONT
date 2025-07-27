@@ -7,17 +7,23 @@ form.monsterForm {
 form.monsterForm label {
   margin-bottom: 0.5rem;
   font-weight: bold;
+  color: #333;
 }
 
 form.monsterForm input {
   margin-bottom: 1rem;
   padding: 0.5rem;
   font-size: 1rem;
+  border: none;
+  background: none;
 }
 
 form.monsterForm button {
+  display: flex;
+  justify-content: center;
   margin-right: 0.5rem;
   padding: 0.5rem 1rem;
   font-size: 1rem;
   cursor: pointer;
+  max-width: 100px;
 }

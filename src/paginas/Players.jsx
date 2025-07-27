@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../servicos/api';
 import PlayerForm from '../componentes/PlayerForm';
+import '../estilos/Players.css';
 
 function Players() {
   const [players, setPlayers] = useState([]);
@@ -45,10 +46,10 @@ function Players() {
   }
 
   return (
-    <div>
+    <div className="players-container">
       <h1>Jogadores</h1>
       {showForm ? (
-        <PlayerForm
+        <PlayerForm className="players-list"
           playerToEdit={editingPlayer}
           onSuccess={handleFormSuccess}
           onCancel={handleFormCancel}
@@ -56,10 +57,10 @@ function Players() {
       ) : (
         <>
           <button onClick={() => setShowForm(true)}>Novo Jogador</button>
-          <ul>
+          <ul className="players-list">
             {players.map(player => (
               <li key={player.id}>
-                {player.name}{' '}
+                {player.username}{' '}
                 <button onClick={() => handleEdit(player)}>Editar</button>{' '}
                 <button onClick={() => handleDelete(player.id)}>Excluir</button>
               </li>

@@ -48,7 +48,14 @@ function SelecaoJogador() {
                 id={`jogador-${jogador.id}`}
                 name="jogador"
                 value={jogador.id}
-                onChange={() => setJogadorSelecionado(jogador)}
+                onChange={() => {
+                  if (jogadorSelecionado && jogadorSelecionado.id === jogador.id) {
+                    setJogadorSelecionado(null);
+                  } else {
+                    setJogadorSelecionado(jogador);
+                  }
+                }}
+                checked={jogadorSelecionado ? jogadorSelecionado.id === jogador.id : false}
               />
               <label htmlFor={`jogador-${jogador.id}`}>
                 {jogador.username}
@@ -68,7 +75,14 @@ function SelecaoJogador() {
                 id={`monstro-${monstro.id}`}
                 name="monstro"
                 value={monstro.id}
-                onChange={() => setMonstroSelecionado(monstro)}
+                onChange={() => {
+                  if (monstroSelecionado && monstroSelecionado.id === monstro.id) {
+                    setMonstroSelecionado(null);
+                  } else {
+                    setMonstroSelecionado(monstro);
+                  }
+                }}
+                checked={monstroSelecionado ? monstroSelecionado.id === monstro.id : false}
               />
               <label htmlFor={`monstro-${monstro.id}`}>
                 {monstro.name} (HP: {monstro.hp}, Ataque: {monstro.attack})
@@ -78,7 +92,7 @@ function SelecaoJogador() {
         </ul>
       </div>
 
-      <button onClick={handleStartBattle}>Começar Batalha</button>
+      <button onClick={handleStartBattle} disabled={!(jogadorSelecionado && monstroSelecionado)}>Começar Batalha</button>
     </div>
   );
 }

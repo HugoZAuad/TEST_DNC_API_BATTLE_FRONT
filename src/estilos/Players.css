@@ -1,0 +1,49 @@
+.players-container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #f1efef;
+  border-radius: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.players-container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.players-container button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0.5rem 0.5rem 0;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.players-container button:hover {
+  background-color: #0056b3;
+}
+
+.players-list {
+  list-style: none;
+  padding: 0;
+}
+
+.players-list li {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ccc;
+  font-size: 1rem;
+  color: #333;
+}
+
+.players-list li:last-child {
+  border-bottom: none;
+}

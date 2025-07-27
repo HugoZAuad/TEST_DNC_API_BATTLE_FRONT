@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import api from '../servicos/api';
-import MonsterForm from '../componentes/MonsterForm';
+import React, { useEffect, useState } from "react";
+import api from "../servicos/api";
+import MonsterForm from "../componentes/MonsterForm";
+import "../estilos/Monster.css";
 
 function Monsters() {
   const [monsters, setMonsters] = useState([]);
@@ -9,10 +10,10 @@ function Monsters() {
 
   async function fetchMonsters() {
     try {
-      const response = await api.get('/monsters');
+      const response = await api.get("/monsters");
       setMonsters(response.data);
     } catch (error) {
-      console.error('Erro ao buscar monstros:', error);
+      console.error("Erro ao buscar monstros:", error);
     }
   }
 
@@ -26,10 +27,11 @@ function Monsters() {
   }
 
   function handleDelete(id) {
-    if (window.confirm('Tem certeza que deseja excluir este monstro?')) {
-      api.delete(`/monsters/${id}`)
+    if (window.confirm("Tem certeza que deseja excluir este monstro?")) {
+      api
+        .delete(`/monsters/${id}`)
         .then(() => fetchMonsters())
-        .catch(err => console.error('Erro ao excluir monstro:', err));
+        .catch((err) => console.error("Erro ao excluir monstro:", err));
     }
   }
 
@@ -45,10 +47,11 @@ function Monsters() {
   }
 
   return (
-    <div>
+    <div className="monster-container">
       <h1>Monstros</h1>
       {showForm ? (
         <MonsterForm
+          className="monster-list"
           monsterToEdit={editingMonster}
           onSuccess={handleFormSuccess}
           onCancel={handleFormCancel}
@@ -56,12 +59,16 @@ function Monsters() {
       ) : (
         <>
           <button onClick={() => setShowForm(true)}>Novo Monstro</button>
-          <ul>
-            {monsters.map(monster => (
+          <ul className="monster-list">
+            {monsters.map((monster) => (
               <li key={monster.id}>
-                {monster.name} (HP: {monster.hp}, Ataque: {monster.attack}, Defesa: {monster.defense}, Velocidade: {monster.speed}, Especial: {monster.specialAbility}){' '}
-                <button onClick={() => handleEdit(monster)}>Editar</button>{' '}
-                <button onClick={() => handleDelete(monster.id)}>Excluir</button>
+                {monster.name} (HP: {monster.hp}, Ataque: {monster.attack},
+                Defesa: {monster.defense}, Velocidade: {monster.speed},
+                Especial: {monster.specialAbility}){" "}
+                <button onClick={() => handleEdit(monster)}>Editar</button>{" "}
+                <button onClick={() => handleDelete(monster.id)}>
+                  Excluir
+                </button>
               </li>
             ))}
           </ul>
