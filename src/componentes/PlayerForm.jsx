@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import api from '../servicos/api';
+import Button from './Button';
 
 import '../estilos/PlayerForm.css';
 
@@ -37,8 +38,8 @@ function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
           placeholder='Digite o nome do jogador'
         />
       </label>
-      <button type="submit">{isEdit ? 'Atualizar' : 'Criar'}</button>
-      {isEdit && <button type="button" onClick={onCancel}>Cancelar</button>}
+      <Button type="submit">{isEdit ? 'Atualizar' : 'Criar'}</Button>
+      {isEdit && <Button type="button" onClick={onCancel}>Cancelar</Button>}
       {message && <p className="successMessage">{message}</p>}
     </form>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../servicos/api';
+import '../estilos/selecaojogador.css';
 
 function SelecaoJogador() {
   const [jogadores, setJogadores] = useState([]);
@@ -13,8 +14,10 @@ function SelecaoJogador() {
     async function fetchData() {
       try {
         const resJogadores = await api.get('/players');
+        console.log('Jogadores fetched:', resJogadores.data);
         setJogadores(resJogadores.data);
         const resMonstros = await api.get('/monsters');
+        console.log('Monstros fetched:', resMonstros.data);
         setMonstros(resMonstros.data);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
@@ -32,40 +35,42 @@ function SelecaoJogador() {
   }
 
   return (
-    <div>
-      <h1>Seleção de Jogador e Monstro</h1>
+    <div className='selecao-jogador'>
+      <h1>Selecione o jogador e o monstro</h1>
 
-      <div>
+      <div className="selection-column">
         <h2>Jogadores</h2>
         <ul>
           {jogadores.map(jogador => (
             <li key={jogador.id}>
-              <label>
-                <input
-                  type="radio"
-                  name="jogador"
-                  value={jogador.id}
-                  onChange={() => setJogadorSelecionado(jogador)}
-                />
-                {jogador.name}
+              <input
+                type="radio"
+                id={`jogador-${jogador.id}`}
+                name="jogador"
+                value={jogador.id}
+                onChange={() => setJogadorSelecionado(jogador)}
+              />
+              <label htmlFor={`jogador-${jogador.id}`}>
+                {jogador.username}
               </label>
             </li>
           ))}
         </ul>
       </div>
 
-      <div>
+      <div className="selection-column">
         <h2>Monstros</h2>
         <ul>
           {monstros.map(monstro => (
             <li key={monstro.id}>
-              <label>
-                <input
-                  type="radio"
-                  name="monstro"
-                  value={monstro.id}
-                  onChange={() => setMonstroSelecionado(monstro)}
-                />
+              <input
+                type="radio"
+                id={`monstro-${monstro.id}`}
+                name="monstro"
+                value={monstro.id}
+                onChange={() => setMonstroSelecionado(monstro)}
+              />
+              <label htmlFor={`monstro-${monstro.id}`}>
                 {monstro.name} (HP: {monstro.hp}, Ataque: {monstro.attack})
               </label>
             </li>

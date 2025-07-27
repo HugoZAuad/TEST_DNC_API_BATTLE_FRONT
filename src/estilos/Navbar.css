@@ -1,8 +1,8 @@
 .navbar {
   padding: 1rem;
   display: flex;
-  justify-content: flex-end;
-  background-color: #eee;
+  justify-content: center;
+  align-items: center;
 }
 
 .navbar a {
@@ -14,4 +14,42 @@
 .activeLink {
   font-weight: bold;
   color: #007bff;
+}
+
+body.light-theme .navbar a {
+  color: #333;
+}
+
+body.light-theme .activeLink {
+  color: #007bff;
+}
+
+body.dark-theme .navbar a {
+  color: #ccc;
+}
+
+body.dark-theme .activeLink {
+  color: #66b2ff;
+}
+
+.theme-toggle {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+.theme-toggle:hover {
+  cursor: pointer;
+  background: none;
+}
+
+body.light-theme {
+  background-color: #fff;
+  color: #000;
+}
+
+body.dark-theme {
+  background-color: #121212;
+  color: #fff;
 }
