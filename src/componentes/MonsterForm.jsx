@@ -54,7 +54,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={hp}
           onChange={e => setHp(e.target.value)}
-          placeholder='Pontos de vida'
+          placeholder='Pontos de vida ate 100'
           required
           min="0"
         />
@@ -65,7 +65,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={attack}
           onChange={e => setAttack(e.target.value)}
-          placeholder='Pontos de ataque'
+          placeholder='Pontos de ataque ate 20'
           required
           min="0"
         />
@@ -76,7 +76,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={defense}
           onChange={e => setDefense(e.target.value)}
-          placeholder='Pontos de defesa'
+          placeholder='Pontos de defesa ate 10'
           required
           min="0"
         />
@@ -87,7 +87,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="number"
           value={speed}
           onChange={e => setSpeed(e.target.value)}
-          placeholder='Pontos de velocidade'
+          placeholder='Pontos de velocidade ate 10'
           required
           min="0"
         />
