@@ -1,0 +1,29 @@
+.playerForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+form.playerForm label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+form.playerForm input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+form.playerForm button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+form.playerForm p.successMessage {
+  color: green;
+  font-weight: bold;
+}
