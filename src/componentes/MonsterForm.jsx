@@ -9,7 +9,8 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
   const [attack, setAttack] = useState(monsterToEdit ? monsterToEdit.attack : '');
   const [defense, setDefense] = useState(monsterToEdit ? monsterToEdit.defense : '');
   const [speed, setSpeed] = useState(monsterToEdit ? monsterToEdit.speed : '');
-  const [special, setSpecial] = useState(monsterToEdit ? monsterToEdit.special : '');
+  const [specialAbility, setSpecialAbility] = useState(monsterToEdit ? monsterToEdit.specialAbility : '');
+  const [playerId, setPlayerId] = useState(monsterToEdit ? monsterToEdit.playerId : '');
   const isEdit = Boolean(monsterToEdit);
 
   async function handleSubmit(e) {
@@ -21,7 +22,8 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
         attack: Number(attack),
         defense: Number(defense),
         speed: Number(speed),
-        special,
+        specialAbility,
+        ...(playerId ? { playerId: Number(playerId) } : {}),
       };
       if (isEdit) {
         await api.patch(`/monsters/${monsterToEdit.id}`, data);
@@ -90,9 +92,18 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
         Habilidade Especial:
         <input
           type="text"
-          value={special}
-          onChange={e => setSpecial(e.target.value)}
+          value={specialAbility}
+          onChange={e => setSpecialAbility(e.target.value)}
           required
+        />
+      </label>
+      <label>
+        Player ID (opcional):
+        <input
+          type="number"
+          value={playerId}
+          onChange={e => setPlayerId(e.target.value)}
+          min="1"
         />
       </label>
       <button type="submit">{isEdit ? 'Atualizar' : 'Criar'}</button>

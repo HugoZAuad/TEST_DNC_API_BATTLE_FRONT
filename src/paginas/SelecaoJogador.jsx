@@ -25,7 +25,6 @@ function SelecaoJogador() {
 
   function handleStartBattle() {
     if (jogadorSelecionado && monstroSelecionado) {
-      // Aqui você pode salvar a seleção no estado global ou contexto
       navigate('/arena', { state: { jogador: jogadorSelecionado, monstro: monstroSelecionado } });
     } else {
       alert('Selecione um jogador e um monstro para começar a batalha.');

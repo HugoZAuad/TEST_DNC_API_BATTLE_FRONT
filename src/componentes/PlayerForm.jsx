@@ -34,6 +34,7 @@ function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
           value={name}
           onChange={e => setName(e.target.value)}
           required
+          placeholder='Digite o nome do jogador'
         />
       </label>
       <button type="submit">{isEdit ? 'Atualizar' : 'Criar'}</button>

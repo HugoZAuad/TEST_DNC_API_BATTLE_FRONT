@@ -59,7 +59,7 @@ function Monsters() {
           <ul>
             {monsters.map(monster => (
               <li key={monster.id}>
-                {monster.name} (HP: {monster.hp}, Ataque: {monster.attack}, Defesa: {monster.defense}, Velocidade: {monster.speed}, Especial: {monster.special}){' '}
+                {monster.name} (HP: {monster.hp}, Ataque: {monster.attack}, Defesa: {monster.defense}, Velocidade: {monster.speed}, Especial: {monster.specialAbility}){' '}
                 <button onClick={() => handleEdit(monster)}>Editar</button>{' '}
                 <button onClick={() => handleDelete(monster.id)}>Excluir</button>
               </li>
