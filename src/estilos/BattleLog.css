@@ -1,0 +1,7 @@
+.arena-status pre {
+  background-color: #f4f4f4;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  overflow-x: auto;
+}
