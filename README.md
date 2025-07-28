@@ -4,56 +4,46 @@
 
 Este projeto é uma aplicação frontend desenvolvida em React para um jogo de batalha onde jogadores selecionam personagens e monstros para lutar em uma arena. A comunicação com o backend é feita via API REST e WebSocket (Socket.IO) para interações em tempo real durante as batalhas.
 
-## Arquitetura
+## Tecnologias Utilizadas
 
-- **React**: Framework utilizado para construção da interface do usuário.
-- **React Router**: Gerencia o roteamento entre páginas, como seleção de jogadores e arena.
-- **Axios**: Realiza requisições HTTP para a API backend para buscar jogadores e monstros.
-- **Socket.IO Client**: Comunicação em tempo real com o servidor backend para atualizações da batalha.
-- **Componentização**: A aplicação é organizada em componentes reutilizáveis, como ArenaPlayers, BattleControls, BattleLog, entre outros.
-- **Gerenciamento de estado**: Utiliza hooks do React (`useState`, `useEffect`) para controlar estado e efeitos colaterais.
-- **Fluxo de batalha em tempo real**:
-  - Conexão ao namespace padrão do Socket.IO no backend.
-  - Entrada em salas de batalha via eventos.
-  - Escuta de atualizações e mudanças de status da batalha.
-  - Emissão de ações do jogador (ataque, defesa, especial, desistência) para o backend.
-- **Estilização**: Uso de CSS modular e estilos globais para a interface.
+- **React**: Biblioteca JavaScript para construção da interface do usuário, utilizando componentes funcionais e hooks para gerenciamento de estado e ciclo de vida.
+- **React Router**: Gerenciamento de rotas para navegação entre páginas da aplicação.
+- **Axios**: Cliente HTTP para comunicação com a API REST do backend.
+- **Socket.IO Client**: Biblioteca para comunicação em tempo real via WebSocket com o servidor backend, permitindo atualizações instantâneas durante as batalhas.
+- **Jest e React Testing Library**: Ferramentas para testes unitários e de integração, garantindo a qualidade e estabilidade do código.
+- **Vite**: Ferramenta de build e desenvolvimento rápido para projetos frontend modernos.
+- **TypeScript**: Superset do JavaScript que adiciona tipagem estática opcional, melhorando a manutenção e robustez do código.
+- **ESLint**: Ferramenta de linting para garantir a qualidade e consistência do código.
 
-## Funcionalidades Principais
+## Boas Práticas Adotadas
 
-- Tela de seleção de jogador e monstro.
-- Arena de batalha em tempo real com:
-  - Exibição das informações do jogador e do adversário (player 2).
-  - Botões de ação: atacar, defender, especial e desistir.
-  - Registro das ações da batalha exibido por turno no histórico de combate.
-  - Mensagens dinâmicas de status refletindo o estado da batalha.
-- Gerenciamento da conexão WebSocket com tratamento de erros.
-- Desistência automática caso o jogador saia da arena.
+- **Componentização**: A interface é dividida em componentes reutilizáveis e isolados, facilitando a manutenção e escalabilidade.
+- **Gerenciamento de Estado com Hooks**: Uso de `useState` e `useEffect` para controlar o estado local e efeitos colaterais de forma clara e eficiente.
+- **Comunicação Assíncrona**: Uso de Axios para chamadas HTTP e Socket.IO para comunicação em tempo real, garantindo uma experiência responsiva ao usuário.
+- **Tratamento de Erros**: Implementação de captura e exibição de erros tanto nas requisições HTTP quanto na comunicação via WebSocket.
+- **Testes Automatizados**: Cobertura de testes unitários e de integração para componentes e páginas principais, assegurando a qualidade do software.
+- **Estilização Modular**: Uso de CSS modular para evitar conflitos de estilos e facilitar a manutenção visual.
 
-## Estrutura de Arquivos
+## Arquitetura do Projeto
 
-- `src/paginas/`: Contém as páginas principais, como `Arena.jsx` e `SelecaoJogador.jsx`.
-- `src/componentes/`: Componentes reutilizáveis da interface, como `ArenaPlayers.jsx`, `BattleControls.jsx`, `BattleLog.jsx`.
-- `src/servicos/`: Configurações de API e socket (`api.js`, `socket.js`).
-- `src/estilos/`: Arquivos CSS para estilização dos componentes e páginas.
+O projeto segue uma arquitetura baseada em componentes React, organizada da seguinte forma:
 
-## Como Funciona
+- **Páginas (`src/paginas/`)**: Contêm as principais telas da aplicação, como a seleção de jogadores e a arena de batalha.
+- **Componentes (`src/componentes/`)**: Componentes reutilizáveis que compõem a interface, como controles de batalha, cabeçalhos, listas de jogadores e monstros.
+- **Serviços (`src/servicos/`)**: Configurações e instâncias para comunicação com APIs e WebSocket.
+- **Estilos (`src/estilos/`)**: Arquivos CSS organizados para estilização modular e global da aplicação.
 
-1. Na tela de seleção, o usuário escolhe um jogador e um monstro.
-2. A aplicação busca os jogadores e monstros disponíveis na API backend.
-3. Ao iniciar a batalha, conecta-se ao servidor Socket.IO do backend.
-4. O jogador entra em uma sala de batalha e aguarda um adversário ou bot.
-5. Quando a batalha começa, eventos em tempo real atualizam o estado da batalha.
-6. Os jogadores realizam ações por meio dos botões, que emitem eventos para o backend.
-7. O registro da batalha é atualizado com as ações realizadas em cada turno, exibido no histórico de combate.
-8. Jogadores podem desistir ou sair, o que gera um evento de desistência.
+A comunicação com o backend é feita por meio de uma API REST para dados estáticos (jogadores, monstros) e via WebSocket para eventos em tempo real durante as batalhas. O estado da aplicação é gerenciado localmente nos componentes, com atualizações disparadas pelos eventos do servidor.
 
-## Observações
+## Funcionamento Geral
 
-- A lógica da batalha, como cálculo de dano e gerenciamento de turnos, é responsabilidade do backend.
-- A aplicação trata erros de conexão e atualiza a interface conforme necessário.
-- O registro da batalha exibe apenas as ações da batalha, sem informações dos jogadores ou monstros.
-- Os botões de ação são desabilitados quando não é o turno do jogador.
+1. O usuário seleciona um jogador e um monstro na tela de seleção.
+2. A aplicação busca os dados necessários via API REST.
+3. Ao iniciar a batalha, conecta-se ao servidor WebSocket e entra em uma sala específica.
+4. Eventos em tempo real atualizam o estado da batalha, exibindo informações do jogador, adversário e histórico de combate.
+5. O usuário pode realizar ações (atacar, defender, especial, desistir) que são enviadas ao backend.
+6. O histórico de combate é atualizado a cada turno, mostrando as ações realizadas.
+7. A batalha termina quando um jogador vence ou desiste, com o estado atualizado e exibido na interface.
 
 ## Como Executar o Projeto
 
@@ -71,4 +61,4 @@ Este projeto é uma aplicação frontend desenvolvida em React para um jogo de b
 
 ---
 
-Este README oferece uma visão completa do projeto, sua arquitetura e funcionalidades para facilitar o entendimento e desenvolvimento da aplicação.
+Este README oferece uma visão completa do projeto, suas tecnologias, boas práticas e arquitetura para facilitar o entendimento e desenvolvimento da aplicação.
