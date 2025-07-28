@@ -43,6 +43,7 @@ function Arena() {
     });
 
     socket.on('battleStarted', (data) => {
+      console.log('Evento battleStarted recebido:', data);
       setBatalha(data.battleState);
       setStatus('Batalha iniciada!');
     });
