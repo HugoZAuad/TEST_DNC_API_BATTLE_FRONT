@@ -93,12 +93,24 @@ function Arena() {
 
   function handleAction(action) {
     if (socket && batalha) {
-      socket.emit('battleAction', {
-        arenaId: batalha.arenaId || arenaId,
-        battleId: batalha.battleId,
-        playerId: jogador.id,
-        action,
-      });
+      if (action === 'forfeit') {
+        // Confirm surrender before emitting
+        if (window.confirm('Você tem certeza que deseja desistir da batalha?')) {
+          socket.emit('battleAction', {
+            arenaId: batalha.arenaId || arenaId,
+            battleId: batalha.battleId,
+            playerId: jogador.id,
+            action,
+          });
+        }
+      } else {
+        socket.emit('battleAction', {
+          arenaId: batalha.arenaId || arenaId,
+          battleId: batalha.battleId,
+          playerId: jogador.id,
+          action,
+        });
+      }
     }
   }
 
@@ -110,12 +122,14 @@ function Arena() {
   const adversario = batalha?.players?.find(p => p.playerId !== jogador.id);
   const monstroAdversario = adversario ? batalha?.monsters?.find(m => m.playerId === adversario.playerId) : null;
 
+  const isPlayerTurn = batalha?.currentTurnPlayerId === jogador.id;
+
   return (
     <div className="arena-container">
       <ArenaHeader />
       <ArenaPlayers jogador={jogador} monstro={monstro} adversario={adversario} monstroAdversario={monstroAdversario} />
       <ArenaStatus status={status} />
-      {batalha && <BattleControls onAction={handleAction} />}
+      {batalha && <BattleControls onAction={handleAction} disabled={!isPlayerTurn} />}
       <BattleLog batalha={batalha} />
       {!batalha && <button className="btn-cancelar" onClick={handleCancelarBatalha}>Cancelar Batalha</button>}
     </div>
