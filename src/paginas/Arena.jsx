@@ -32,8 +32,6 @@ function Arena() {
 
     socket.on('availableConfirmed', () => {
       setStatus('Jogador disponível para batalha. Aguardando oponente...');
-      console.log('Emitindo startBattle', { playerId: jogador.id, arenaId, battleId: batalha?.battleId });
-      socket.emit('startBattle', { playerId: jogador.id, arenaId, battleId: batalha?.battleId });
     });
 
     socket.on('connect', onConnect);
