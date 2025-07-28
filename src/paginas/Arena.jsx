@@ -46,31 +46,26 @@ function Arena() {
       setBatalha(data);
       setStatus('Batalha iniciada!');
 
-      // Disconnect from default socket and connect to battle namespace
-      defaultSocket.disconnect();
-      battleSocket = createSocket(data.battleId);
-      setSocket(battleSocket);
+      // Join the battle room on the default socket namespace
+      defaultSocket.emit('joinBattle', data.battleId);
 
-      battleSocket.on('connect', () => {
-        console.log('Conectado ao namespace da batalha:', battleSocket.id);
-      });
-
-      battleSocket.on('battleUpdate', (update) => {
+      // Listen for battle updates and other events on defaultSocket
+      defaultSocket.on('battleUpdate', (update) => {
         setBatalha(update);
       });
 
-      battleSocket.on('battleEnded', (result) => {
+      defaultSocket.on('battleEnded', (result) => {
         setStatus('Batalha encerrada!');
         // Handle battle end logic here
       });
 
-      battleSocket.on('error', (message) => {
+      defaultSocket.on('error', (message) => {
         console.error('Erro recebido do socket:', message);
         const errorMsg = typeof message === 'object' ? JSON.stringify(message) : message;
         setStatus(`Erro: ${errorMsg}`);
       });
 
-      battleSocket.on('connect_error', (err) => {
+      defaultSocket.on('connect_error', (err) => {
         console.log('Erro de conexão do socket:', err);
       });
     });
@@ -118,9 +113,19 @@ function Arena() {
     return <div className="arena-container">Seleção inválida. Volte para a tela de seleção.</div>;
   }
 
-  // Extract opponent player and monster from battle state
-  const adversario = batalha?.players?.find(p => p.playerId !== jogador.id);
-  const monstroAdversario = adversario ? batalha?.monsters?.find(m => m.playerId === adversario.playerId) : null;
+  // Extract opponent player and monster from battle state, including bot data
+  let adversario = batalha?.players?.find(p => p.playerId !== jogador.id);
+  let monstroAdversario = null;
+
+  if (adversario) {
+    monstroAdversario = batalha?.monsters?.find(m => m.playerId === adversario.playerId);
+  } else if (batalha?.players?.length === 2) {
+    // If no adversario found, try to find bot player
+    adversario = batalha.players.find(p => p.isBot);
+    if (adversario) {
+      monstroAdversario = batalha.monsters.find(m => m.playerId === adversario.playerId);
+    }
+  }
 
   const isPlayerTurn = batalha?.currentTurnPlayerId === jogador.id;
 
