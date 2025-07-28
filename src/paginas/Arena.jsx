@@ -43,8 +43,13 @@ function Arena() {
       setBatalha(data);
       setStatus('Batalha iniciada!');
 
-      // Refresh the page to reload the arena route with the battleId
-      window.location.reload();
+      // Refresh the page to reload the arena route with the battleId after 10 seconds delay
+      if (!window.hasReloaded) {
+        window.hasReloaded = true;
+        setTimeout(() => {
+          window.location.reload();
+        }, 10000);
+      }
 
       // Disconnect from default socket and connect to battle namespace
       defaultSocket.disconnect();
