@@ -22,6 +22,9 @@ function Arena() {
       return;
     }
 
+    // Declare battleSocket in the scope of useEffect
+    let battleSocket = null;
+
     // Connect to default socket namespace
     const defaultSocket = createSocket();
     setSocket(defaultSocket);
@@ -43,17 +46,9 @@ function Arena() {
       setBatalha(data);
       setStatus('Batalha iniciada!');
 
-      // Refresh the page to reload the arena route with the battleId after 10 seconds delay
-      if (!window.hasReloaded) {
-        window.hasReloaded = true;
-        setTimeout(() => {
-          window.location.reload();
-        }, 10000);
-      }
-
       // Disconnect from default socket and connect to battle namespace
       defaultSocket.disconnect();
-      const battleSocket = createSocket(data.battleId);
+      battleSocket = createSocket(data.battleId);
       setSocket(battleSocket);
 
       battleSocket.on('connect', () => {
@@ -74,10 +69,10 @@ function Arena() {
         const errorMsg = typeof message === 'object' ? JSON.stringify(message) : message;
         setStatus(`Erro: ${errorMsg}`);
       });
-    });
 
-    battleSocket?.on('connect_error', (err) => {
-      console.log('Erro de conexão do socket:', err);
+      battleSocket.on('connect_error', (err) => {
+        console.log('Erro de conexão do socket:', err);
+      });
     });
 
     return () => {
@@ -85,6 +80,9 @@ function Arena() {
       defaultSocket.off('availableConfirmed');
       defaultSocket.off('battleStarted');
       defaultSocket.off('connect_error');
+      if (battleSocket) {
+        battleSocket.disconnect();
+      }
       socket?.disconnect();
     };
   }, [jogador, monstro, arenaId, navigate]);
