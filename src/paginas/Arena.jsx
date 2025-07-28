@@ -106,14 +106,18 @@ function Arena() {
     return <div className="arena-container">Seleção inválida. Volte para a tela de seleção.</div>;
   }
 
+  // Extract opponent player and monster from battle state
+  const adversario = batalha?.players?.find(p => p.playerId !== jogador.id);
+  const monstroAdversario = adversario ? batalha?.monsters?.find(m => m.playerId === adversario.playerId) : null;
+
   return (
     <div className="arena-container">
       <ArenaHeader />
-      <ArenaPlayers jogador={jogador} monstro={monstro} />
+      <ArenaPlayers jogador={jogador} monstro={monstro} adversario={adversario} monstroAdversario={monstroAdversario} />
       <ArenaStatus status={status} />
       {batalha && <BattleControls onAction={handleAction} />}
       <BattleLog batalha={batalha} />
-      <button className="btn-cancelar" onClick={handleCancelarBatalha}>Cancelar Batalha</button>
+      {!batalha && <button className="btn-cancelar" onClick={handleCancelarBatalha}>Cancelar Batalha</button>}
     </div>
   );
 }
