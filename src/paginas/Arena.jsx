@@ -18,31 +18,49 @@ function Arena() {
   useEffect(() => {
     if (!jogador || !monstro) return;
 
-    socket.emit('playerAvailable', { playerId: jogador.id });
-    socket.emit('startBattle', { playerId: jogador.id });
+    const onConnect = () => {
+      console.log('Socket conectado no front:', socket.id);
+      console.log('Emitindo playerAvailable', { playerId: jogador.id });
+      socket.emit('playerAvailable', { playerId: jogador.id });
+
+      console.log('Emitindo startBattle', { playerId: jogador.id });
+      socket.emit('startBattle', { playerId: jogador.id });
+    };
+
+    socket.on('connect', onConnect);
 
     socket.on('availableConfirmed', () => {
+      console.log('Evento recebido: availableConfirmed');
       setStatus('Jogador disponível para batalha. Aguardando oponente...');
     });
 
     socket.on('battleStarted', (data) => {
+      console.log('Evento recebido: battleStarted', data);
       setBatalha(data.battleState);
       setStatus('Batalha iniciada!');
     });
 
     socket.on('battleUpdate', (data) => {
+      console.log('Evento recebido: battleUpdate', data);
       setBatalha(data);
     });
 
     socket.on('error', (message) => {
+      console.log('Evento recebido: error', message);
       setStatus(`Erro: ${message}`);
     });
 
+    socket.on('connect_error', (err) => {
+      console.log('Erro de conexão do socket:', err);
+    });
+
     return () => {
+      socket.off('connect', onConnect);
       socket.off('availableConfirmed');
       socket.off('battleStarted');
       socket.off('battleUpdate');
       socket.off('error');
+      socket.off('connect_error');
     };
   }, [jogador, monstro]);
 
@@ -51,6 +69,11 @@ function Arena() {
   }
 
   function handleAction(action) {
+    console.log('Emitindo battleAction', {
+      arenaId: batalha?.arenaId,
+      playerId: jogador.id,
+      action,
+    });
     socket.emit('battleAction', {
       arenaId: batalha?.arenaId,
       playerId: jogador.id,
