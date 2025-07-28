@@ -15,6 +15,7 @@ function Arena() {
   const [batalha, setBatalha] = useState(null);
   const [status, setStatus] = useState('Aguardando início da batalha...');
   const [socket, setSocket] = useState(null);
+  const [historicoCombate, setHistoricoCombate] = useState([]);
 
   useEffect(() => {
     if (!jogador || !monstro || !arenaId) {
@@ -22,10 +23,7 @@ function Arena() {
       return;
     }
 
-    // Declare battleSocket in the scope of useEffect
     let battleSocket = null;
-
-    // Connect to default socket namespace
     const defaultSocket = createSocket();
     setSocket(defaultSocket);
 
@@ -50,17 +48,18 @@ function Arena() {
       setBatalha(data);
       setStatus('Batalha iniciada!');
 
-      // Join the battle room on the default socket namespace
       defaultSocket.emit('joinBattle', data.battleId);
 
-      // Listen for battle updates and other events on defaultSocket
       defaultSocket.on('battleUpdate', (update) => {
         setBatalha(update);
       });
 
+      defaultSocket.on('battleTurnEnded', (turnInfo) => {
+        setHistoricoCombate(prev => [...prev, turnInfo]);
+      });
+
       defaultSocket.on('battleEnded', (result) => {
         setStatus('Batalha encerrada!');
-        // Handle battle end logic here
       });
 
       defaultSocket.on('error', (message) => {
@@ -78,6 +77,8 @@ function Arena() {
       defaultSocket.off('connect', onConnect);
       defaultSocket.off('availableConfirmed');
       defaultSocket.off('battleStarted');
+      defaultSocket.off('battleTurnEnded');
+      defaultSocket.off('battleEnded');
       defaultSocket.off('connect_error');
       if (battleSocket) {
         battleSocket.disconnect();
@@ -95,23 +96,23 @@ function Arena() {
     if (socket && batalha) {
       console.log('Socket connected:', socket.connected);
       if (action === 'forfeit') {
-        // Confirm surrender before emitting
         if (window.confirm('Você tem certeza que deseja desistir da batalha?')) {
           console.log('Emitting battleAction for forfeit');
           socket.emit('battleAction', {
-            arenaId: batalha.arenaId || arenaId,
-            battleId: batalha.battleId,
-            playerId: jogador.id,
+            arenaId: batalha?.arenaId || arenaId,
+            battleId: batalha?.battleId,
+            playerId: jogador?.id,
             action,
           });
+          navigate('/');
         }
       } else {
-        const targetId = batalha.monsters?.find(m => m.playerId !== jogador.id)?.id;
+        const targetId = batalha?.monsters?.find(m => m.playerId !== jogador?.id)?.id;
         console.log('Emitting battleAction for action:', action, 'targetId:', targetId);
         socket.emit('battleAction', {
-          arenaId: batalha.arenaId || arenaId,
-          battleId: batalha.battleId,
-          playerId: jogador.id,
+          arenaId: batalha?.arenaId || arenaId,
+          battleId: batalha?.battleId,
+          playerId: jogador?.id,
           action,
           target_id: targetId,
         });
@@ -125,14 +126,12 @@ function Arena() {
     return <div className="arena-container">Seleção inválida. Volte para a tela de seleção.</div>;
   }
 
-  // Extract opponent player and monster from battle state, including bot data
   let adversario = batalha?.players?.find(p => p.playerId !== jogador.id);
   let monstroAdversario = null;
 
   if (adversario) {
     monstroAdversario = batalha?.monsters?.find(m => m.playerId === adversario.playerId);
   } else if (batalha?.players?.length === 2) {
-    // If no adversario found, try to find bot player
     adversario = batalha.players.find(p => p.isBot);
     if (adversario) {
       monstroAdversario = batalha.monsters.find(m => m.playerId === adversario.playerId);
@@ -147,7 +146,14 @@ function Arena() {
       <ArenaPlayers jogador={jogador} monstro={monstro} adversario={adversario} monstroAdversario={monstroAdversario} />
       <ArenaStatus status={status} />
       {batalha && <BattleControls onAction={handleAction} disabled={!isPlayerTurn} />}
-      <BattleLog batalha={batalha} />
+      <div className="battle-history">
+        <h3>Histórico de Combate</h3>
+        <ul>
+          {historicoCombate.map((turn, index) => (
+            <li key={index}>{turn.description || JSON.stringify(turn)}</li>
+          ))}
+        </ul>
+      </div>
       {!batalha && <button className="btn-cancelar" onClick={handleCancelarBatalha}>Cancelar Batalha</button>}
     </div>
   );

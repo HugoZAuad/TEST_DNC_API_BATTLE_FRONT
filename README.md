@@ -23,9 +23,9 @@ Este projeto é uma aplicação frontend desenvolvida em React para um jogo de b
 
 - Tela de seleção de jogador e monstro.
 - Arena de batalha em tempo real com:
-  - Exibição das informações do jogador e do adversário.
+  - Exibição das informações do jogador e do adversário (player 2).
   - Botões de ação: atacar, defender, especial e desistir.
-  - Registro das ações da batalha exibido por turno.
+  - Registro das ações da batalha exibido por turno no histórico de combate.
   - Mensagens dinâmicas de status refletindo o estado da batalha.
 - Gerenciamento da conexão WebSocket com tratamento de erros.
 - Desistência automática caso o jogador saia da arena.
@@ -45,7 +45,7 @@ Este projeto é uma aplicação frontend desenvolvida em React para um jogo de b
 4. O jogador entra em uma sala de batalha e aguarda um adversário ou bot.
 5. Quando a batalha começa, eventos em tempo real atualizam o estado da batalha.
 6. Os jogadores realizam ações por meio dos botões, que emitem eventos para o backend.
-7. O registro da batalha é atualizado com as ações realizadas em cada turno.
+7. O registro da batalha é atualizado com as ações realizadas em cada turno, exibido no histórico de combate.
 8. Jogadores podem desistir ou sair, o que gera um evento de desistência.
 
 ## Observações

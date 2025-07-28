@@ -98,7 +98,7 @@ function MonsterForm({ onSuccess, monsterToEdit, onCancel }) {
           type="text"
           value={specialAbility}
           onChange={e => setSpecialAbility(e.target.value)}
-          placeholder='Habilidade especial do monstro'
+          placeholder='Qual o nome?'
           required
         />
       </label>
