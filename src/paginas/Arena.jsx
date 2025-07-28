@@ -11,42 +11,44 @@ import '../estilos/Arena.css';
 function Arena() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { jogador, monstro } = location.state || {};
+  const { jogador, monstro, arenaId } = location.state || {};
   const [batalha, setBatalha] = useState(null);
   const [status, setStatus] = useState('Aguardando início da batalha...');
 
   useEffect(() => {
-    if (!jogador || !monstro) return;
+    if (!jogador || !monstro || !arenaId) return;
 
     const onConnect = () => {
       console.log('Socket conectado no front:', socket.id);
-      console.log('Emitindo playerAvailable', { playerId: jogador.id });
-      socket.emit('playerAvailable', { playerId: jogador.id });
 
-      console.log('Emitindo startBattle', { playerId: jogador.id });
-      socket.emit('startBattle', { playerId: jogador.id });
+      // Primeiro, entra na arena
+      console.log('Emitindo joinArena', { arenaId, playerId: jogador.id, monsterId: monstro.id });
+      socket.emit('joinArena', { arenaId, playerId: jogador.id, monsterId: monstro.id });
+
+      // Depois, sinaliza disponibilidade e pede para iniciar batalha
+      console.log('Emitindo playerAvailable', { playerId: jogador.id, arenaId });
+      socket.emit('playerAvailable', { playerId: jogador.id, arenaId });
+
+      console.log('Emitindo startBattle', { playerId: jogador.id, arenaId });
+      socket.emit('startBattle', { playerId: jogador.id, arenaId });
     };
 
     socket.on('connect', onConnect);
 
     socket.on('availableConfirmed', () => {
-      console.log('Evento recebido: availableConfirmed');
       setStatus('Jogador disponível para batalha. Aguardando oponente...');
     });
 
     socket.on('battleStarted', (data) => {
-      console.log('Evento recebido: battleStarted', data);
       setBatalha(data.battleState);
       setStatus('Batalha iniciada!');
     });
 
     socket.on('battleUpdate', (data) => {
-      console.log('Evento recebido: battleUpdate', data);
       setBatalha(data);
     });
 
     socket.on('error', (message) => {
-      console.log('Evento recebido: error', message);
       setStatus(`Erro: ${message}`);
     });
 
@@ -62,20 +64,15 @@ function Arena() {
       socket.off('error');
       socket.off('connect_error');
     };
-  }, [jogador, monstro]);
+  }, [jogador, monstro, arenaId]);
 
   function handleCancelarBatalha() {
     navigate('/');
   }
 
   function handleAction(action) {
-    console.log('Emitindo battleAction', {
-      arenaId: batalha?.arenaId,
-      playerId: jogador.id,
-      action,
-    });
     socket.emit('battleAction', {
-      arenaId: batalha?.arenaId,
+      arenaId: batalha?.arenaId || arenaId,
       playerId: jogador.id,
       action,
     });

@@ -14,10 +14,8 @@ function SelecaoJogador() {
     async function fetchData() {
       try {
         const resJogadores = await api.get('/players');
-        console.log('Jogadores fetched:', resJogadores.data);
         setJogadores(resJogadores.data);
         const resMonstros = await api.get('/monsters');
-        console.log('Monstros fetched:', resMonstros.data);
         setMonstros(resMonstros.data);
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
@@ -28,7 +26,9 @@ function SelecaoJogador() {
 
   function handleStartBattle() {
     if (jogadorSelecionado && monstroSelecionado) {
-      navigate('/arena', { state: { jogador: jogadorSelecionado, monstro: monstroSelecionado } });
+      // Use um arenaId fixo para todos entrarem juntos (ou gere um UUID se preferir)
+      const arenaId = 'arena-global';
+      navigate('/arena', { state: { jogador: jogadorSelecionado, monstro: monstroSelecionado, arenaId } });
     } else {
       alert('Selecione um jogador e um monstro para começar a batalha.');
     }
@@ -37,7 +37,6 @@ function SelecaoJogador() {
   return (
     <div className='selecao-jogador'>
       <h1>Selecione o jogador e o monstro</h1>
-
       <div className="selection-column">
         <h2>Jogadores</h2>
         <ul>
@@ -48,23 +47,14 @@ function SelecaoJogador() {
                 id={`jogador-${jogador.id}`}
                 name="jogador"
                 value={jogador.id}
-                onChange={() => {
-                  if (jogadorSelecionado && jogadorSelecionado.id === jogador.id) {
-                    setJogadorSelecionado(null);
-                  } else {
-                    setJogadorSelecionado(jogador);
-                  }
-                }}
+                onChange={() => setJogadorSelecionado(jogador)}
                 checked={jogadorSelecionado ? jogadorSelecionado.id === jogador.id : false}
               />
-              <label htmlFor={`jogador-${jogador.id}`}>
-                {jogador.username}
-              </label>
+              <label htmlFor={`jogador-${jogador.id}`}>{jogador.username}</label>
             </li>
           ))}
         </ul>
       </div>
-
       <div className="selection-column">
         <h2>Monstros</h2>
         <ul>
@@ -75,13 +65,7 @@ function SelecaoJogador() {
                 id={`monstro-${monstro.id}`}
                 name="monstro"
                 value={monstro.id}
-                onChange={() => {
-                  if (monstroSelecionado && monstroSelecionado.id === monstro.id) {
-                    setMonstroSelecionado(null);
-                  } else {
-                    setMonstroSelecionado(monstro);
-                  }
-                }}
+                onChange={() => setMonstroSelecionado(monstro)}
                 checked={monstroSelecionado ? monstroSelecionado.id === monstro.id : false}
               />
               <label htmlFor={`monstro-${monstro.id}`}>
@@ -91,8 +75,9 @@ function SelecaoJogador() {
           ))}
         </ul>
       </div>
-
-      <button onClick={handleStartBattle} disabled={!(jogadorSelecionado && monstroSelecionado)}>Começar Batalha</button>
+      <button onClick={handleStartBattle} disabled={!(jogadorSelecionado && monstroSelecionado)}>
+        Começar Batalha
+      </button>
     </div>
   );
 }
