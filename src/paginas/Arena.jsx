@@ -43,6 +43,9 @@ function Arena() {
       setBatalha(data);
       setStatus('Batalha iniciada!');
 
+      // Refresh the page to reload the arena route with the battleId
+      window.location.reload();
+
       // Disconnect from default socket and connect to battle namespace
       defaultSocket.disconnect();
       const battleSocket = createSocket(data.battleId);
