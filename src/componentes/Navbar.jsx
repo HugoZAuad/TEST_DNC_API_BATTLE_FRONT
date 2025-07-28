@@ -8,21 +8,49 @@ const Navbar = () => {
   const [theme, setTheme] = useState('light');
 
   useEffect(() => {
-    console.log('Theme changed to:', theme);
     document.body.className = theme === 'light' ? 'light-theme' : 'dark-theme';
   }, [theme]);
 
   const toggleTheme = () => {
-    console.log('Toggling theme from:', theme);
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  const handleHomeClick = (e) => {
+    const isInArena = window.location.pathname.includes('/arena');
+    if (isInArena) {
+      const confirmExit = window.confirm(
+        'Você está em uma batalha. Sair agora contará como desistência. Deseja continuar?'
+      );
+      if (!confirmExit) {
+        e.preventDefault();
+      }
+    }
   };
 
   return (
     <nav className="navbar">
       <div className="nav-links">
-        <NavLink to="/" className={({ isActive }) => (isActive ? 'activeLink' : undefined)}>Home</NavLink> |{' '}
-        <NavLink to="/players" className={({ isActive }) => (isActive ? 'activeLink' : undefined)}>Players</NavLink> |{' '}
-        <NavLink to="/monsters" className={({ isActive }) => (isActive ? 'activeLink' : undefined)}>Monsters</NavLink>
+        <NavLink
+          to="/"
+          onClick={handleHomeClick}
+          className={({ isActive }) => (isActive ? 'activeLink' : undefined)}
+        >
+          Home
+        </NavLink>{' '}
+        |{' '}
+        <NavLink
+          to="/players"
+          className={({ isActive }) => (isActive ? 'activeLink' : undefined)}
+        >
+          Players
+        </NavLink>{' '}
+        |{' '}
+        <NavLink
+          to="/monsters"
+          className={({ isActive }) => (isActive ? 'activeLink' : undefined)}
+        >
+          Monsters
+        </NavLink>
       </div>
       <Button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
         {theme === 'light' ? <FaMoon /> : <FaSun />}
