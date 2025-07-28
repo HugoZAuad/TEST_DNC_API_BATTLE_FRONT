@@ -21,11 +21,11 @@ function Arena() {
     const onConnect = () => {
       console.log('Socket conectado no front:', socket.id);
 
-      // Primeiro, entra na arena
-      console.log('Emitindo joinArena', { arenaId, playerId: jogador.id, monsterId: monstro.id });
-      socket.emit('joinArena', { arenaId, playerId: jogador.id, monsterId: monstro.id });
+      // 1. Faz o join na arena
+      console.log('Emitindo joinArena', { arenaId, player_id: jogador.id, monster_id: monstro.id });
+      socket.emit('joinArena', { arenaId, player_id: jogador.id, monster_id: monstro.id });
 
-      // Depois, sinaliza disponibilidade e pede para iniciar batalha
+      // 2. Sinaliza disponibilidade e pede para iniciar batalha
       console.log('Emitindo playerAvailable', { playerId: jogador.id, arenaId });
       socket.emit('playerAvailable', { playerId: jogador.id, arenaId });
 
