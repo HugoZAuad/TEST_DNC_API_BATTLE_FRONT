@@ -25,13 +25,16 @@ function Arena() {
       console.log('Emitindo joinArena', { arenaId, player_id: jogador.id, monster_id: monstro.id });
       socket.emit('joinArena', { arenaId, player_id: jogador.id, monster_id: monstro.id });
 
-      // 2. Sinaliza disponibilidade e pede para iniciar batalha
+      // 2. Sinaliza disponibilidade
       console.log('Emitindo playerAvailable', { playerId: jogador.id, arenaId });
       socket.emit('playerAvailable', { playerId: jogador.id, arenaId });
+    };
 
+    socket.on('availableConfirmed', () => {
+      setStatus('Jogador disponível para batalha. Aguardando oponente...');
       console.log('Emitindo startBattle', { playerId: jogador.id, arenaId });
       socket.emit('startBattle', { playerId: jogador.id, arenaId });
-    };
+    });
 
     socket.on('connect', onConnect);
 
