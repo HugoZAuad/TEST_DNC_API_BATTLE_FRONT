@@ -53,7 +53,9 @@ function Arena() {
     });
 
     socket.on('error', (message) => {
-      setStatus(`Erro: ${message}`);
+      console.error('Erro recebido do socket:', message);
+      const errorMsg = typeof message === 'object' ? JSON.stringify(message) : message;
+      setStatus(`Erro: ${errorMsg}`);
     });
 
     socket.on('connect_error', (err) => {
