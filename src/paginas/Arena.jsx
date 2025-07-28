@@ -37,8 +37,12 @@ function Arena() {
 
     defaultSocket.on('connect', onConnect);
 
-    defaultSocket.on('availableConfirmed', () => {
-      setStatus('Jogador disponível para batalha. Aguardando oponente...');
+    defaultSocket.on('availableConfirmed', (data) => {
+      if (data && data.isBot) {
+        setStatus('Um robô foi encontrado! Preparando para a batalha...');
+      } else {
+        setStatus('Jogador disponível para batalha. Aguardando oponente...');
+      }
     });
 
     defaultSocket.on('battleStarted', (data) => {
@@ -102,12 +106,14 @@ function Arena() {
           });
         }
       } else {
-        console.log('Emitting battleAction for action:', action);
+        const targetId = batalha.monsters.find(m => m.playerId !== jogador.id)?.id;
+        console.log('Emitting battleAction for action:', action, 'targetId:', targetId);
         socket.emit('battleAction', {
           arenaId: batalha.arenaId || arenaId,
           battleId: batalha.battleId,
           playerId: jogador.id,
           action,
+          target_id: targetId,
         });
       }
     } else {

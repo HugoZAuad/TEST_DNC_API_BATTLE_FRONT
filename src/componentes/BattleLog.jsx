@@ -10,18 +10,29 @@ function BattleLog({ batalha }) {
     );
   }
 
-  // Assuming batalha has a property 'turnLogs' which is an array of action descriptions
-  const turnLogs = batalha.turnLogs || [];
+  // Assuming batalha has a property 'turns' which is an array of turn objects
+  const turns = batalha.turns || [];
 
   return (
     <div className="arena-status">
       <h3>Estado da Batalha</h3>
-      {turnLogs.length > 0 ? (
-        <ul>
-          {turnLogs.map((log, index) => (
-            <li key={index}>{log}</li>
+      {turns.length > 0 ? (
+        <div>
+          {turns.map((turn, index) => (
+            <div key={index} style={{ marginBottom: '1em' }}>
+              <strong>Turno {index + 1}</strong>
+              <ul>
+                {turn.actions && turn.actions.length > 0 ? (
+                  turn.actions.map((action, i) => (
+                    <li key={i}>{action}</li>
+                  ))
+                ) : (
+                  <li>Nenhuma ação registrada neste turno.</li>
+                )}
+              </ul>
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <pre>{JSON.stringify(batalha, null, 2)}</pre>
       )}
