@@ -26,7 +26,6 @@ function SelecaoJogador() {
 
   function handleStartBattle() {
     if (jogadorSelecionado && monstroSelecionado) {
-      // Use um arenaId fixo para todos entrarem juntos (ou gere um UUID se preferir)
       const arenaId = 'arena-global';
       navigate('/arena', { state: { jogador: jogadorSelecionado, monstro: monstroSelecionado, arenaId } });
     } else {

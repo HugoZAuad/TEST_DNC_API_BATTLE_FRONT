@@ -5,7 +5,6 @@ import ArenaHeader from '../componentes/ArenaHeader';
 import ArenaPlayers from '../componentes/ArenaPlayers';
 import ArenaStatus from '../componentes/ArenaStatus';
 import BattleControls from '../componentes/BattleControls';
-import BattleLog from '../componentes/BattleLog';
 import '../estilos/Arena.css';
 
 function Arena() {
@@ -108,7 +107,7 @@ function Arena() {
         }
       } else {
         const targetId = batalha?.monsters?.find(m => m.playerId !== jogador?.id)?.id;
-        console.log('Emitting battleAction for action:', action, 'targetId:', targetId);
+        console.log('Emitting battleAction for action:', action, 'targetId:', playerId);
         socket.emit('battleAction', {
           arenaId: batalha?.arenaId || arenaId,
           battleId: batalha?.battleId,

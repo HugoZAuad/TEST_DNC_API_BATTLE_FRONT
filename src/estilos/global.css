@@ -1,20 +1,18 @@
-/* Estilos globais básicos */
-
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+  background-color: #ffffff;
   color: #333;
 }
 
 h1, h2, h3 {
-  color: #222;
+  color: #686868;
 }
 
 button {
   cursor: pointer;
   padding: 8px 16px;
-  background-color: #007bff;
+  background-color: #002fff;
   border: none;
   color: white;
   border-radius: 4px;

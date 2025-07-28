@@ -17,7 +17,7 @@
 }
 
 body.light-theme .navbar a {
-  color: #333;
+  color: #383838;
 }
 
 body.light-theme .activeLink {
@@ -25,7 +25,7 @@ body.light-theme .activeLink {
 }
 
 body.dark-theme .navbar a {
-  color: #ccc;
+  color: #dbdbdb;
 }
 
 body.dark-theme .activeLink {
@@ -45,11 +45,11 @@ body.dark-theme .activeLink {
 }
 
 body.light-theme {
-  background-color: #fff;
+  background-color: #d8d8d8;
   color: #000;
 }
 
 body.dark-theme {
-  background-color: #121212;
+  background-color: #303030;
   color: #fff;
 }

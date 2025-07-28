@@ -10,7 +10,6 @@ function BattleLog({ batalha }) {
     );
   }
 
-  // Assuming batalha has a property 'turns' which is an array of turn objects
   const turns = batalha.turns || [];
 
   return (

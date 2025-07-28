@@ -2,13 +2,13 @@
   padding: 0.5rem 1rem;
   font-size: 1rem;
   cursor: pointer;
-  border: 1px solid #007bff;
-  background-color: #007bff;
-  color: white;
+  border: 1px solid #ffffffff;
+  background-color: #00c71b;
+  color: black;
   border-radius: 4px;
   transition: background-color 0.3s ease;
 }
 
 .custom-button:hover {
-  background-color: #0056b3;
+  background-color: #216800;
 }
