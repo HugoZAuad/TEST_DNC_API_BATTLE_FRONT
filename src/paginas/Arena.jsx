@@ -106,7 +106,7 @@ function Arena() {
           });
         }
       } else {
-        const targetId = batalha.monsters.find(m => m.playerId !== jogador.id)?.id;
+        const targetId = batalha.monsters?.find(m => m.playerId !== jogador.id)?.id;
         console.log('Emitting battleAction for action:', action, 'targetId:', targetId);
         socket.emit('battleAction', {
           arenaId: batalha.arenaId || arenaId,
