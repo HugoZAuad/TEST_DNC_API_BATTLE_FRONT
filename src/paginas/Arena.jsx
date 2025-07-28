@@ -87,10 +87,13 @@ function Arena() {
   }
 
   function handleAction(action) {
+    console.log('handleAction called with action:', action);
     if (socket && batalha) {
+      console.log('Socket connected:', socket.connected);
       if (action === 'forfeit') {
         // Confirm surrender before emitting
         if (window.confirm('Você tem certeza que deseja desistir da batalha?')) {
+          console.log('Emitting battleAction for forfeit');
           socket.emit('battleAction', {
             arenaId: batalha.arenaId || arenaId,
             battleId: batalha.battleId,
@@ -99,6 +102,7 @@ function Arena() {
           });
         }
       } else {
+        console.log('Emitting battleAction for action:', action);
         socket.emit('battleAction', {
           arenaId: batalha.arenaId || arenaId,
           battleId: batalha.battleId,
@@ -106,6 +110,8 @@ function Arena() {
           action,
         });
       }
+    } else {
+      console.warn('Socket or battle state not ready');
     }
   }
 
