@@ -1,21 +1,77 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import PlayerForm from '../PlayerForm';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import PlayerForm from '../componentes/PlayerForm';
+import api from '../servicos/api';
 
-describe('PlayerForm Component', () => {
-  test('renders form inputs and submits data', () => {
-    const handleSubmit = jest.fn();
-    render(<PlayerForm onSubmit={handleSubmit} />);
+jest.mock('../servicos/api');
 
-    const usernameInput = screen.getByLabelText(/Nome de usuário/i);
-    const submitButton = screen.getByRole('button', { name: /Salvar/i });
+describe('PlayerForm', () => {
+  const mockOnSuccess = jest.fn();
+  const mockOnCancel = jest.fn();
 
-    expect(usernameInput).toBeInTheDocument();
-    expect(submitButton).toBeInTheDocument();
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-    fireEvent.change(usernameInput, { target: { value: 'Jogador Teste' } });
-    fireEvent.click(submitButton);
+  it('deve criar um novo jogador com sucesso', async () => {
+    api.post.mockResolvedValue({ data: {} });
 
-    expect(handleSubmit).toHaveBeenCalled();
+    render(<PlayerForm onSuccess={mockOnSuccess} />);
+
+    fireEvent.change(screen.getByPlaceholderText(/Digite o nome/i), {
+      target: { value: 'Novo Jogador' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Criar/i }));
+
+    await waitFor(() => {
+      expect(api.post).toHaveBeenCalledWith('/players', { username: 'Novo Jogador' });
+      expect(mockOnSuccess).toHaveBeenCalled();
+      expect(screen.getByText(/Jogador criado com sucesso/i)).toBeInTheDocument();
+    });
+  });
+
+  it('deve atualizar jogador existente com sucesso', async () => {
+    const jogador = { id: '1', username: 'Jogador Antigo' };
+    api.patch.mockResolvedValue({ data: {} });
+
+    render(
+      <PlayerForm
+        onSuccess={mockOnSuccess}
+        playerToEdit={jogador}
+        onCancel={mockOnCancel}
+      />
+    );
+
+    expect(screen.getByDisplayValue('Jogador Antigo')).toBeInTheDocument();
+
+    fireEvent.change(screen.getByPlaceholderText(/Digite o nome/i), {
+      target: { value: 'Jogador Atualizado' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Atualizar/i }));
+
+    await waitFor(() => {
+      expect(api.patch).toHaveBeenCalledWith('/players/1', {
+        username: 'Jogador Atualizado',
+      });
+      expect(mockOnSuccess).toHaveBeenCalled();
+      expect(screen.getByText(/Jogador atualizado com sucesso/i)).toBeInTheDocument();
+    });
+  });
+
+  it('deve chamar onCancel ao clicar em Cancelar', () => {
+    const jogador = { id: '1', username: 'Jogador Antigo' };
+
+    render(
+      <PlayerForm
+        onSuccess={mockOnSuccess}
+        playerToEdit={jogador}
+        onCancel={mockOnCancel}
+      />
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /Cancelar/i }));
+    expect(mockOnCancel).toHaveBeenCalled();
   });
 });

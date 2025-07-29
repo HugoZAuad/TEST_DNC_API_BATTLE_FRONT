@@ -30,7 +30,6 @@ function Arena() {
       defaultSocket.emit('joinArena', { arenaId, player_id: jogador.id, monster_id: monstro.id });
       defaultSocket.emit('playerAvailable', { playerId: jogador.id, arenaId });
 
-      // Simulação de batalha com bot para testes
       setTimeout(() => {
         const fakeBattle = {
           arenaId,
@@ -75,7 +74,6 @@ function Arena() {
         target_id: targetId
       });
 
-      // Simulação de resposta do turno
       const newTurn = {
         actions: [`${jogador.username} usou ${action} contra ${targetId}`]
       };

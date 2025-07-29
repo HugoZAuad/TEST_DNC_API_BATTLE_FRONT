@@ -1,51 +1,73 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import Arena from '../Arena';
+import Arena from '../paginas/Arena';
+import * as socketService from '../servicos/socket';
 
-const mockLocationState = {
-  jogador: { id: 1, username: 'Jogador1' },
-  monstro: { id: 1, name: 'Monstro1', hp: 100, attack: 20 },
-  arenaId: 'arena-global',
-};
-
-jest.mock('../../servicos/socket', () => ({
-  createSocket: () => ({
-    on: jest.fn(),
+jest.mock('../servicos/socket', () => ({
+  createSocket: jest.fn(() => ({
+    on: jest.fn((event, cb) => {
+      if (event === 'connect') {
+        cb(); // simula conexão imediata
+      }
+    }),
     emit: jest.fn(),
-    off: jest.fn(),
     disconnect: jest.fn(),
-    connected: true,
-  }),
+  })),
 }));
 
-describe('Arena Page', () => {
-  test('renders without crashing and shows initial status', () => {
-    render(
-      <MemoryRouter initialEntries={[{ pathname: '/arena', state: mockLocationState }]}>
-        <Routes>
-          <Route path="/arena" element={<Arena />} />
-        </Routes>
-      </MemoryRouter>
-    );
+const mockJogador = { id: '1', username: 'Player One' };
+const mockMonstro = { id: 'm1', name: 'Dragon' };
+const mockArenaId = 'arena123';
 
-    expect(screen.getByText(/Aguardando início da batalha/i)).toBeInTheDocument();
+function renderWithRouter(state) {
+  return render(
+    <MemoryRouter initialEntries={[{ pathname: '/arena', state }]}>
+      <Routes>
+        <Route path="/arena" element={<Arena />} />
+        <Route path="/selecao" element={<div>Redirecionado para seleção</div>} />
+        <Route path="/" element={<div>Redirecionado para home</div>} />
+      </Routes>
+    </MemoryRouter>
+  );
+}
+
+describe('Arena Component', () => {
+  it('should redirect if missing state', () => {
+    renderWithRouter({});
+    expect(screen.getByText(/Redirecionado para seleção/i)).toBeInTheDocument();
   });
 
-  test('cancel battle button navigates home', () => {
-    const { container } = render(
-      <MemoryRouter initialEntries={[{ pathname: '/arena', state: mockLocationState }]}>
-        <Routes>
-          <Route path="/" element={<div>Home</div>} />
-          <Route path="/arena" element={<Arena />} />
-        </Routes>
-      </MemoryRouter>
-    );
+  it('should render arena and simulate battle', async () => {
+    renderWithRouter({ jogador: mockJogador, monstro: mockMonstro, arenaId: mockArenaId });
 
-    const cancelButton = container.querySelector('.btn-cancelar');
-    expect(cancelButton).toBeInTheDocument();
+    expect(screen.getByText(/Aguardando início da batalha/i)).toBeInTheDocument();
 
-    fireEvent.click(cancelButton);
-    expect(screen.getByText('Home')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/Batalha simulada com bot iniciada/i)).toBeInTheDocument();
+      expect(screen.getByText(/Botzilla/)).toBeInTheDocument();
+    });
+  });
+
+  it('should handle action click and update turn', async () => {
+    renderWithRouter({ jogador: mockJogador, monstro: mockMonstro, arenaId: mockArenaId });
+
+    await waitFor(() => screen.getByText(/Botzilla/));
+
+    const attackButton = screen.getByRole('button', { name: /Atacar/i });
+    fireEvent.click(attackButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Player One usou attack contra bot123/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should cancel battle and redirect to home', async () => {
+    renderWithRouter({ jogador: mockJogador, monstro: mockMonstro, arenaId: mockArenaId });
+
+    await waitFor(() => screen.getByText(/Cancelar Batalha/i));
+    fireEvent.click(screen.getByText(/Cancelar Batalha/i));
+
+    expect(screen.getByText(/Redirecionado para home/i)).toBeInTheDocument();
   });
 });
