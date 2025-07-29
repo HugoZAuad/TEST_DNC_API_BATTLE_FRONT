@@ -13,10 +13,10 @@ function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
     e.preventDefault();
     try {
       if (isEdit) {
-        await api.patch(`/players/${playerToEdit.id}`, { username });
+        await api.patch(`/players/${playerToEdit.id}`, { username: name });
         setMessage('Jogador atualizado com sucesso!');
       } else {
-        await api.post('/players', { username });
+        await api.post('/players', { username: name })
         setMessage('Jogador criado com sucesso!');
       }
       onSuccess();
@@ -32,7 +32,7 @@ function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
         Nome: 
         <input
           type="text"
-          value={username}
+          value={name}
           onChange={e => setName(e.target.value)}
           required
           placeholder='Digite o nome do jogador'
