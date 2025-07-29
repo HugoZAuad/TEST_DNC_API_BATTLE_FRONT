@@ -5,7 +5,7 @@ import Button from './Button';
 import '../estilos/PlayerForm.css';
 
 function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
-  const [name, setName] = useState(playerToEdit ? playerToEdit.name : '');
+  const [name, setName] = useState(playerToEdit ? playerToEdit.username : '');
   const [message, setMessage] = useState('');
   const isEdit = Boolean(playerToEdit);
 
@@ -13,10 +13,10 @@ function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
     e.preventDefault();
     try {
       if (isEdit) {
-        await api.patch(`/players/${playerToEdit.id}`, { name });
+        await api.patch(`/players/${playerToEdit.id}`, { username });
         setMessage('Jogador atualizado com sucesso!');
       } else {
-        await api.post('/players', { name });
+        await api.post('/players', { username });
         setMessage('Jogador criado com sucesso!');
       }
       onSuccess();
@@ -32,7 +32,7 @@ function PlayerForm({ onSuccess, playerToEdit, onCancel }) {
         Nome: 
         <input
           type="text"
-          value={name}
+          value={username}
           onChange={e => setName(e.target.value)}
           required
           placeholder='Digite o nome do jogador'
